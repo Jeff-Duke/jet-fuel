@@ -23,7 +23,6 @@ app.get('/', (request, response) => {
 app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
   let longURL = app.locals.URLs[shortURL];
-
   response.redirect(longURL);
 });
 
