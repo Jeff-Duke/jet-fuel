@@ -24,16 +24,12 @@ app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
   let longURL = app.locals.URLs[shortURL];
 
-  response.json({ shortURL, longURL });
+  response.redirect(longURL);
 });
 
 app.get('/api/URLs/', (request, response) => {
   const URLs = app.locals.URLs;
   response.status(201).json({ URLs });
-});
-
-app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
 
 app.post('/api/URLs', (request, response) => {
@@ -49,5 +45,8 @@ app.post('/api/URLs', (request, response) => {
   app.locals.URLs[shortURL] = longURL;
 
   response.status(201).json({ shortURL, longURL});
+});
 
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
