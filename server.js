@@ -4,10 +4,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const urlChars = '123456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ';
-
 app.locals.URLs = {
   xZB32: 'http://www.turing.io',
+  gsYqa: 'http://www.twitter.com',
+  hASp2: 'http://www.facebook.com',
 };
 
 app.use(bodyParser.json());
@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Jet Fuel';
+const host = `http://localhost:${app.get('port')}/`;
 
 app.get('/', (request, response) => {
   response.send('Let\'s shorten that URL');
@@ -42,8 +43,9 @@ app.post('/api/URLs', (request, response) => {
   }
 
   app.locals.URLs[shortURL] = longURL;
+  let fullShortenedURL = host + 'api/URLs/' + shortURL;
 
-  response.status(201).json({ shortURL, longURL});
+  response.status(201).json({ fullShortenedURL, longURL });
 });
 
 app.listen(app.get('port'), () => {
