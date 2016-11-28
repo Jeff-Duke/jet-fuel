@@ -20,13 +20,34 @@ app.get('/', (request, response) => {
   response.send('Let\'s shorten that URL');
 });
 
-app.get('/api/:shortURL', (request, response) => {
+app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
   let longURL = app.locals.URLs[shortURL];
 
   response.json({ shortURL, longURL });
 });
 
+app.get('/api/URLs/', (request, response) => {
+  const URLs = app.locals.URLs;
+  response.status(201).json({ URLs });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
+
+app.post('/api/URLs', (request, response) => {
+  const { longURL } = request.body;
+  const shortURL = Date.now();
+
+  if(!longURL) {
+    return response.status(422).send({
+      error: 'No URL specified'
+    });
+  }
+
+  app.locals.URLs[shortURL] = longURL;
+
+  response.status(201).json({ shortURL, longURL});
+
 });
