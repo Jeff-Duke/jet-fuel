@@ -3,13 +3,14 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path');
 
 app.locals.URLs = {
   xZB32: 'http://www.turing.io',
   gsYqa: 'http://www.twitter.com',
   hASp2: 'http://www.facebook.com',
 };
-
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -18,7 +19,8 @@ app.locals.title = 'Jet Fuel';
 const host = `http://localhost:${app.get('port')}/`;
 
 app.get('/', (request, response) => {
-  response.send('Let\'s shorten that URL');
+  console.log(__dirname);
+  response.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.get('/api/URLs/:shortURL', (request, response) => {
