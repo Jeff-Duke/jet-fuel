@@ -19,7 +19,6 @@ app.locals.title = 'Jet Fuel';
 const host = `http://localhost:${app.get('port')}/`;
 
 app.get('/', (request, response) => {
-  console.log(__dirname);
   response.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
