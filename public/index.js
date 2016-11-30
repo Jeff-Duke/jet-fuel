@@ -1,23 +1,27 @@
+'use strict';
+
 const $urlInput = $('.url-input');
 const $displayUrls = $('.display-urls');
 const $submitButton = $('.submit-button');
 
-$(document).ready(() => {
-  getAllUrls();
-});
-
-let getAllUrls = () => {
-  $.getJSON('api/URLs', (data) => {
-    putUrlsOnPage(data.URLs);
+const putUrlsOnPage = (urls) => {
+  $displayUrls.html('');
+  $.each(urls, (key,data) => {
+    let { longURL, dateCreated, clicks } = data;
+    let shortURL = 'http://localhost:3000/api/URLs/' + key;
+     $displayUrls.append(
+      `<article class="single-url">
+        <p> Shortened URL: <a href="${shortURL}">${shortURL}</a> </p>
+        <p> Original URL: <a href="${longURL}>">${longURL}</a> </p>
+        <p> Clicks: ${clicks} </p>  
+        <p> Date Created: ${dateCreated} </p>
+      </article>`);
   });
 };
 
-let putUrlsOnPage = (urls) => {
-  $.each(urls, (key,value) => {
-     $displayUrls.append(
-      `<div class="single-url">
-        ${key} is short for ${value}
-      </div>`);
+const getAllUrls = () => {
+  $.getJSON('api/URLs', (data) => {
+    putUrlsOnPage(data.URLs);
   });
 };
 
@@ -32,4 +36,8 @@ $submitButton.on('click', (e) => {
       $urlInput.val('');
     }
   });
+});
+
+$(document).ready(() => {
+  getAllUrls();
 });
