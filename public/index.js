@@ -2,7 +2,7 @@
 const $urlInput = $('.url-input');
 const $displayUrls = $('.display-urls');
 const $submitButton = $('.submit-button');
-const $urlInputValue = $('.url-input');
+
 
 $(document).ready(() => {
   getAllUrls();
@@ -23,18 +23,19 @@ let putUrlsOnPage = (urls) => {
   });
 };
 
+// TODO:  need to render shorty, longy, date added, and how many times clicked
+// TODO: sort by popularity and by date added both ascending and descending
+// TODO: be able to click shortened URL
+
 $submitButton.on('click', (e) => {
   e.preventDefault();
-  // let urlString = $urlInputValue.toString();
-  // $.post('/api/URLs', { longURL: urlString
-  // })
-  // .then(getAllUrls());
   $.ajax({
     url: '/api/URLs/',
     type: 'POST',
     data: {longURL: $urlInput.val()},
     success: () => {
       getAllUrls();
+      $urlInput.val('');
     }
   });
 });
