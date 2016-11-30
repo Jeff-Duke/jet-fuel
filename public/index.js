@@ -8,7 +8,7 @@ const putUrlsOnPage = (urls) => {
   $displayUrls.html('');
   $.each(urls, (key,data) => {
     let { longURL, dateCreated, clicks } = data;
-    let shortURL = 'http://localhost:3000/api/URLs/' + key;
+    let shortURL = 'http://localhost:3000/' + key;
      $displayUrls.append(
       `<article class="single-url">
         <p> Shortened URL: <a href="${shortURL}">${shortURL}</a> </p>
