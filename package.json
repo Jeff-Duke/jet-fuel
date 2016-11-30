@@ -4,7 +4,6 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "webpack",
     "start": "node server.js",
     "test": "mocha",
     "test-feature": "mocha test/specs/feature-test",
@@ -38,7 +37,6 @@
     "supertest": "^2.0.1",
     "wdio": "^0.3.3",
     "wdio-mocha-framework": "^0.4.0",
-    "webdriverio": "^4.2.7",
-    "webpack": "^1.13.3"
+    "webdriverio": "^4.2.7"
   }
 }

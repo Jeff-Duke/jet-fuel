@@ -1,5 +1,4 @@
 'use strict';
-const moment = require('moment');
 
 const $urlInput = $('.url-input');
 const $displayUrls = $('.display-urls');
@@ -9,7 +8,7 @@ const putUrlsOnPage = (urls) => {
   $displayUrls.html('');
   $.each(urls, (key,data) => {
     let { longURL, dateCreated, clicks } = data;
-    let formatDate = moment(dateCreated).format('MMMM Do, h:mm a');
+    let formatDate = moment(dateCreated).format('MMMM Do, YYYY, h:mm a');
     let shortURL = 'http://localhost:3000/api/URLs/' + key;
      $displayUrls.append(
       `<article class="single-url">
