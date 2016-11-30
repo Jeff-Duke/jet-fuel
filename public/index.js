@@ -3,10 +3,9 @@
 const $urlInput = $('.url-input');
 const $displayUrls = $('.display-urls');
 const $submitButton = $('.submit-button');
-const $urlContainer = $('.display-urls');
 
 const putUrlsOnPage = (urls) => {
-  $urlContainer.html('');
+  $displayUrls.html('');
   $.each(urls, (key,data) => {
     let { longURL, dateCreated, clicks } = data;
     let shortURL = 'http://localhost:3000/api/URLs/' + key;
