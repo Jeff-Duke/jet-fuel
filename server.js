@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -23,8 +24,12 @@ app.get('/', (request, response) => {
 
 app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
+  const link = app.locals.URLs[shortURL];
 
-  let longURL = app.locals.URLs[shortURL].longURL;
+  if (!link) { return response.status(404).send('No such link, bozo.'); }
+  link.clicks += 1;
+  let longURL = link.longURL;
+  
   response.redirect(longURL);
 });
 

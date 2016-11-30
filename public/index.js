@@ -11,7 +11,7 @@ const putUrlsOnPage = (urls) => {
     let { longURL, dateCreated, clicks } = data;
     let shortURL = 'http://localhost:3000/api/URLs/' + key;
      $displayUrls.append(
-      `<article class="url-card">
+      `<article class="single-url">
         <p> Shortened URL: <a href = "${shortURL}">${shortURL}</a> </p>
         <p> Original URL: <a href = "${longURL}>">${longURL}</a> </p>
         <p> Clicks: ${clicks} </p>  
