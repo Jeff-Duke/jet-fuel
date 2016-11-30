@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const shortid = require('shortid');
+const normalizeUrl = require('normalize-url');
 
 app.locals.URLs = {
   xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 0},
@@ -29,7 +30,7 @@ app.get('/api/URLs/', (request, response) => {
 });
 
 app.post('/api/URLs', (request, response) => {
-  const { longURL } = request.body;
+  let { longURL } = request.body;
   const shortURL = shortid.generate(longURL);
   let dateCreated = Date.now();
   let clicks = 0;
@@ -39,7 +40,9 @@ app.post('/api/URLs', (request, response) => {
       error: 'No URL specified'
     });
   }
-
+  
+  longURL = normalizeUrl(longURL);
+  
   app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
   
   let fullShortenedURL = host + shortURL;
