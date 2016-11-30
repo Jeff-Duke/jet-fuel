@@ -25,6 +25,19 @@ describe('GET all urls', () => {
       .get('/api/URLs')
       .expect(201, {URLs: app.locals.URLs}, done);
   });
+
+  it('should return the correct URLs from the database', (done) => {
+    request(app)
+    .get('/api/URLs')
+    .expect(201)
+    .end(() => {
+      let expectedResponse = [{
+          shortURL: 'www.short.com',
+          longURL: 'www.areallylongwebaddress.com' }];
+      assert.deepEqual(app.locals.URLs, expectedResponse);
+      done();
+    });
+  });
 });
 
 describe('GET a specific shortURL', () => {
@@ -46,14 +59,16 @@ describe('GET a specific shortURL', () => {
       .expect(302, done);
   });
 
-  // it('should return a saved URL with the specific shortURL provided', (done) => {
-  //   const url = this.URL;
-  //   // const [ url ] = app.locals.URLs;
-  //
-  //   request(app)
-  //     .get(`/api/URLs/${this.URL.shortURL}`)
-  //     .expect(302, { url }, done);
-  // });
+  it('should return a saved URL with the specific shortURL provided', (done) => {
+
+    request(app)
+      .get(`/api/URLs/${this.URL.shortURL}`)
+      .expect(302)
+      .end(() => {
+        assert.equal(this.URL.longURL, 'www.areallylongwebaddress.com');
+        done();
+      });
+  });
 });
 
 describe('submit (POST) a long url', () => {
@@ -88,22 +103,16 @@ describe('submit (POST) a long url', () => {
       .expect(422, done);
   });
 
-  // it('should add a new URL', (done) => {
-  //   const newLongURL = 'www.areallylongwebaddress.com';
-  //
-  //   let checkAgain = () => {
-  //       request(app)
-  //         .get('/api/URLs');
-  //   };
-  //
-  //   request(app)
-  //     .post('/api/URLs')
-  //     .send({ newLongURL })
-  //     .expect(201, checkAgain())
-  //     .end(() => {
-  //       assert.equal(app.locals.URLs.length, 1);
-  //       done();
-  //     });
-  // });
+  it('should add a new URL', (done) => {
+    const newLongURL =  {longURL: 'www.areallylongwebaddress.com'};
 
+    request(app)
+      .post('/api/URLs')
+      .send(newLongURL)
+      .expect(201)
+      .end(() => {
+        assert.equal(Object.keys(app.locals.URLs).length, 1);
+        done();
+      });
+  });
 });
