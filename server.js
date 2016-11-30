@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
+const shortid = require('shortid');
+const normalizeUrl = require('normalize-url');
 
 app.locals.URLs = {
   xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 0},
@@ -22,25 +24,14 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.get('/api/URLs/:shortURL', (request, response) => {
-  const { shortURL } = request.params;
-  const link = app.locals.URLs[shortURL];
-
-  if (!link) { return response.status(404).send('No such link, bozo.'); }
-  link.clicks += 1;
-  let longURL = link.longURL;
-  
-  response.redirect(longURL);
-});
-
 app.get('/api/URLs/', (request, response) => {
   const URLs = app.locals.URLs;
   response.status(201).json({ URLs });
 });
 
 app.post('/api/URLs', (request, response) => {
-  const { longURL } = request.body;
-  const shortURL = Date.now();
+  let { longURL } = request.body;
+  const shortURL = shortid.generate(longURL);
   let dateCreated = Date.now();
   let clicks = 0;
 
@@ -49,12 +40,25 @@ app.post('/api/URLs', (request, response) => {
       error: 'No URL specified'
     });
   }
-
+  
+  longURL = normalizeUrl(longURL);
+  
   app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
   
-  let fullShortenedURL = host + 'api/URLs/' + shortURL;
+  let fullShortenedURL = host + shortURL;
 
   response.status(201).json({ fullShortenedURL, longURL });
+});
+
+app.get('/:shortURL', (request, response) => {
+  const { shortURL } = request.params;
+  const link = app.locals.URLs[shortURL];
+
+  if (!link) { return response.status(404).send('No such link, bozo.'); }
+  link.clicks += 1;
+  let longURL = link.longURL;
+  
+  response.redirect(longURL);
 });
 
 app.listen(app.get('port'), () => {
