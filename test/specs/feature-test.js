@@ -9,7 +9,7 @@ let server;
 const port = process.env.PORT || 3001;
 
 before((done) => {
-  server = app.listen(port, (err, result) => {
+  server = app.listen(port, (err) => {
     if (err) { return done(err); }
     done();
   });
