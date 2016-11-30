@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -10,6 +8,7 @@ app.locals.URLs = {
   gsYqa: 'http://www.twitter.com',
   hASp2: 'http://www.facebook.com',
 };
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +23,7 @@ app.get('/', (request, response) => {
 
 app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
+
   let longURL = app.locals.URLs[shortURL];
   response.redirect(longURL);
 });
@@ -52,3 +52,5 @@ app.post('/api/URLs', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
+
+module.exports = app;
