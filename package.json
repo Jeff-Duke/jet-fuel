@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "test-feature": "mocha test/specs",
+    "test-feature": "mocha test/specs/feature-test",
     "selenium-install": "mkdir -p test/specs && curl http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar > ./test/specs/selenium.jar",
     "selenium-start": "java -jar ./test/specs/selenium.jar",
     "selenium-test": "concurrently -k -s last -p command  'npm run selenium-start' 'npm run test-feature'"

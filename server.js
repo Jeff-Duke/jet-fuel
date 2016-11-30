@@ -3,13 +3,11 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// app.locals.URLs = {
-//   xZB32: 'http://www.turing.io',
-//   gsYqa: 'http://www.twitter.com',
-//   hASp2: 'http://www.facebook.com',
-// };
-
-app.locals.URLs =[];
+app.locals.URLs = {
+  xZB32: 'http://www.turing.io',
+  gsYqa: 'http://www.twitter.com',
+  hASp2: 'http://www.facebook.com',
+};
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -25,6 +23,7 @@ app.get('/', (request, response) => {
 
 app.get('/api/URLs/:shortURL', (request, response) => {
   const { shortURL } = request.params;
+
   let longURL = app.locals.URLs[shortURL];
   response.redirect(longURL);
 });
