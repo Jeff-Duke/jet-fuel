@@ -15,17 +15,11 @@ let getAllUrls = () => {
 let putUrlsOnPage = (urls) => {
   $.each(urls, (key,value) => {
      $displayUrls.append(
-      `<div>
+      `<div class="single-url">
         ${key} is short for ${value}
       </div>`);
   });
 };
-
-// TODO:  need to render shorty, longy, date added, and how many times clicked
-// TODO: sort by popularity and by date added both ascending and descending
-// TODO: create shortened URL
-// TODO: be able to click shortened URL
-// TODO: testing
 
 $submitButton.on('click', (e) => {
   e.preventDefault();

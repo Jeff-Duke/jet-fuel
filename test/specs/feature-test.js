@@ -19,7 +19,7 @@ after((done) => {
   server.close(done);
 });
 
-describe('Main Page', () => {
+describe('Jet Fuel homepage', () => {
 
   it('should have the title stored in app.locals.title', (done) => {
     client

@@ -25,6 +25,19 @@ describe('GET all urls', () => {
       .get('/api/URLs')
       .expect(201, {URLs: app.locals.URLs}, done);
   });
+
+  it('should return the correct URLs from the database', (done) => {
+    request(app)
+    .get('/api/URLs')
+    .expect(201)
+    .end(() => {
+      let expectedResponse = [{
+          shortURL: 'www.short.com',
+          longURL: 'www.areallylongwebaddress.com' }];
+      assert.deepEqual(app.locals.URLs, expectedResponse);
+      done();
+    });
+  });
 });
 
 describe('GET a specific shortURL', () => {
@@ -105,5 +118,4 @@ describe('submit (POST) a long url', () => {
   //       done();
   //     });
   // });
-
 });
