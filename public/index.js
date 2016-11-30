@@ -1,5 +1,8 @@
+// const $ = require('jquery');
 const $urlInput = $('.url-input');
 const $displayUrls = $('.display-urls');
+const $submitButton = $('.submit-button');
+const $urlInputValue = $('.url-input');
 
 $(document).ready(() => {
   getAllUrls();
@@ -19,3 +22,19 @@ let putUrlsOnPage = (urls) => {
       </div>`);
   });
 };
+
+$submitButton.on('click', (e) => {
+  e.preventDefault();
+  // let urlString = $urlInputValue.toString();
+  // $.post('/api/URLs', { longURL: urlString
+  // })
+  // .then(getAllUrls());
+  $.ajax({
+    url: '/api/URLs/',
+    type: 'POST',
+    data: {longURL: $urlInput.val()},
+    success: () => {
+      getAllUrls();
+    }
+  });
+});
