@@ -5,12 +5,21 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const shortid = require('shortid');
 const normalizeUrl = require('normalize-url');
+const request = require('request');
+const cheerio = require('cheerio');
 
-app.locals.URLs = {
-  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2, shortUrl: 'xZB32'},
-  gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0, shortUrl: 'gsYqa'},
-  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 3, shortUrl: 'hASp2'}
+const fetchTitle = (longURL, callback) => {
+ request(longURL, (error, externalResponse, body) => {
+    if (error) { return callback(error); }
+
+    let $ = cheerio.load(body);
+    let title = $('head > title').text();
+    
+    callback(null, title);
+  });
 };
+
+app.locals.URLs = {};
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -31,7 +40,8 @@ app.get('/api/URLs/', (request, response) => {
 
 app.post('/api/URLs', (request, response) => {
   let { longURL } = request.body;
-  const shortURL = shortid.generate(longURL);
+  longURL = normalizeUrl(longURL);
+  let shortURL = shortid.generate(longURL);
   let dateCreated = Date.now();
   let clicks = 0;
 
@@ -41,13 +51,12 @@ app.post('/api/URLs', (request, response) => {
     });
   }
 
-  longURL = normalizeUrl(longURL);
-
-  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks, shortURL };
-
-  let fullShortenedURL = host + shortURL;
-
-  response.status(201).json({ fullShortenedURL, longURL });
+  fetchTitle(longURL, (error, title) => {
+    if (error) { return response.status(422).send(error); }
+    app.locals.URLs[shortURL] = { title, shortURL, longURL, dateCreated, clicks };
+    let fullShortenedURL = host + shortURL;
+    response.status(201).json({ fullShortenedURL, longURL });
+  });
 });
 
 app.get('/:shortURL', (request, response) => {
@@ -58,7 +67,7 @@ app.get('/:shortURL', (request, response) => {
   link.clicks += 1;
   let longURL = link.longURL;
 
-  response.redirect(longURL);
+  response.status(302).redirect(longURL);
 });
 
 app.listen(app.get('port'), () => {
