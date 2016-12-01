@@ -8,31 +8,18 @@ const normalizeUrl = require('normalize-url');
 const request = require('request');
 const cheerio = require('cheerio');
 
-const fetchTitle = (longURL) => {
-  request(longURL, (error, response, body) => {
-    if(!error && response.statusCode == 200) {
-      let $ = cheerio.load(body);
-      let title = $('head > title').text();
-      console.log('title from within the fetchTitle function: ', title);
-      return title;
-    }
+const fetchTitle = (longURL, callback) => {
+ request(longURL, (error, externalResponse, body) => {
+    if (error) { return callback(error); }
+
+    let $ = cheerio.load(body);
+    let title = $('head > title').text();
+    
+    callback(null, title);
   });
 };
 
-const checkURL = (longURL) => {
-    request(longURL, (error, response) => {
-    if(error || response.statusCode != 200) {
-      return response.statusCode.send('There was a problem with your request');
-    }
-    else console.log(response.statusCode);
-  });
-};
-
-app.locals.URLs = {
-  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2},
-  gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0}, 
-  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 3}
-};
+app.locals.URLs = {};
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -58,19 +45,18 @@ app.post('/api/URLs', (request, response) => {
   let dateCreated = Date.now();
   let clicks = 0;
 
-  checkURL(longURL);
-  fetchTitle(longURL);
-
   if(!longURL) {
     return response.status(422).send({
       error: 'No URL specified'
     });
   }
-  
-  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
-  
-  let shortenedURL = host + shortURL;
-  response.status(201).json({ shortenedURL, longURL });
+
+  fetchTitle(longURL, (error, title) => {
+    if (error) { return response.status(422).send(error); }
+    app.locals.URLs[shortURL] = { title, shortURL, longURL, dateCreated, clicks };
+    let fullShortenedURL = host + shortURL;
+    response.status(201).json({ fullShortenedURL, longURL });
+  });
 });
 
 app.get('/:shortURL', (request, response) => {
@@ -81,7 +67,7 @@ app.get('/:shortURL', (request, response) => {
   link.clicks += 1;
   let longURL = link.longURL;
 
-  response.redirect(longURL);
+  response.status(302).redirect(longURL);
 });
 
 app.listen(app.get('port'), () => {

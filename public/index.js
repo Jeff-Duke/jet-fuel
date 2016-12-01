@@ -14,15 +14,18 @@ let urls;
 const putUrlsOnPage = (allUrls = urls) => {
   $displayUrls.html('');
   $.each(allUrls, (key,data) => {
-    let { longURL, dateCreated, clicks } = data;
+    let { title, longURL, dateCreated, clicks, shortURL } = data;
     let formatDate = moment(dateCreated).format('MMMM Do, YYYY, h:mm a');
-    let shortURL = hostName + key;
+    let fullShortURL = hostName + shortURL;
      $displayUrls.append(
       `<article class="single-url">
         <p>
+          ${title}
+        </p>
+        <p>
           Shortened URL:
-          <a href="${shortURL}">
-            ${shortURL}
+          <a href="${fullShortURL}">
+            ${fullShortURL}
           </a>
         </p>
         <p>
@@ -48,22 +51,49 @@ const getAllUrls = () => {
   });
 };
 
-// TODO (in the works) - implement sorting functions
+const sortUrls = (items, sortBy, sortMethod) => {
+  let sortedUrls = _.orderBy(items, [sortBy], [sortMethod]);
+  putUrlsOnPage(sortedUrls);
+};
+
+const sortByOldest = () => {
+  let oldUrls = urls;
+  sortUrls(oldUrls, 'dateCreated', 'asc');
+};
+
+const sortByNewest = () => {
+  let newUrls = urls;
+  sortUrls(newUrls, 'dateCreated', 'desc');
+};
+
+const sortByLonely = () => {
+  let lonelyUrls = urls;
+  sortUrls(lonelyUrls, 'clicks', 'asc');
+};
+
+const sortByPopular = () => {
+  let popularUrls = urls;
+  sortUrls(popularUrls, 'clicks', 'desc');
+};
 
 $oldestButton.on('click', (e) => {
   e.preventDefault();
+  sortByOldest();
 });
 
 $newestButton.on('click', (e) => {
   e.preventDefault();
+  sortByNewest();
 });
 
 $popularButton.on('click', (e) => {
   e.preventDefault();
+  sortByPopular();
 });
 
 $lonelyButton.on('click', (e) => {
   e.preventDefault();
+  sortByLonely();
 });
 
 $submitButton.on('click', (e) => {
