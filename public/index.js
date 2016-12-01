@@ -48,60 +48,23 @@ const getAllUrls = () => {
   });
 };
 
-const sortByOldest = () => {
-  let currentUrls = urls;
-  let sortedUrls = _.sortBy(currentUrls, [(s) => {
-    return s.dateCreated;
-  }]);
-  putUrlsOnPage(sortedUrls);
-};
-
-const sortByNewest = () => {
-  let currentUrls = urls;
-  let sortedUrls = _.sortBy(currentUrls, [(s) => {
-    return s.dateCreated;
-  }]);
-  let reverseSort = sortedUrls.reverse();
-  putUrlsOnPage(reverseSort);
-};
-
-const sortByLonely = () => {
-  let currentUrls = urls;
-  let sortedUrls = _.sortBy(currentUrls, [(s) => {
-    return s.clicks;
-  }]);
-  putUrlsOnPage(sortedUrls);
-};
-
-const sortByPopular = () => {
-  let currentUrls = urls;
-  let sortedUrls = _.sortBy(currentUrls, [(s) => {
-    return s.clicks;
-  }]);
-  let reverseSort = sortedUrls.reverse();
-  putUrlsOnPage(reverseSort);
-};
+// TODO (in the works) - implement sorting functions
 
 $oldestButton.on('click', (e) => {
   e.preventDefault();
-  sortByOldest();
 });
 
 $newestButton.on('click', (e) => {
   e.preventDefault();
-  sortByNewest();
 });
 
 $popularButton.on('click', (e) => {
   e.preventDefault();
-  sortByPopular();
 });
 
 $lonelyButton.on('click', (e) => {
   e.preventDefault();
-  sortByLonely();
 });
-
 
 $submitButton.on('click', (e) => {
   e.preventDefault();
