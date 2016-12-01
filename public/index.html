@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="./style.css">
     <title>Jeff Yule</title>
   </head>
   <body>
@@ -18,9 +19,25 @@
       </label>
       <button class="submit-button">Submit</button>
     </form>
+    <section class="sort-buttons">
+      <button class="oldest-button">
+        Show oldest first
+      </button>
+      <button class="newest-button">
+        Show newest first
+      </button>
+      <button class="popular-button">
+        OMG, like show the most popular first, duh
+      </button>
+      <button class="lonely-button">
+        Show the sad links no one cares about first
+      </button>
+    </section>
     <section class="display-urls">
     </section>
     <script src="jquery-3.1.1.min.js"></script>
+    <script src="lodash.js"></script>
+    <script src="moment.js"></script>
     <script src="index.js"></script>
   </body>
 </html>

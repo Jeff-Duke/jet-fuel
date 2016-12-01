@@ -20,9 +20,9 @@ const fetchTitle = (longURL) => {
 };
 
 app.locals.URLs = {
-  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 0},
+  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2},
   gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0}, 
-  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 0}
+  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 3}
 };
 
 app.use(express.static('public'));
@@ -53,7 +53,7 @@ app.post('/api/URLs', (request, response) => {
       error: 'No URL specified'
     });
   }
-  
+
   longURL = normalizeUrl(longURL);
 
   let generateNewShortenedURL = (title) => {
@@ -68,7 +68,7 @@ app.post('/api/URLs', (request, response) => {
   fetchTitle(longURL, (title) => {
     generateNewShortenedURL(title);
   });
-  
+
 });
 
 app.get('/:shortURL', (request, response) => {
@@ -78,7 +78,7 @@ app.get('/:shortURL', (request, response) => {
   if (!link) { return response.status(404).send('No such link, bozo.'); }
   link.clicks += 1;
   let longURL = link.longURL;
-  
+
   response.redirect(longURL);
 });
 
