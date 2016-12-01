@@ -31,7 +31,7 @@ app.get('/api/URLs/', (request, response) => {
 
 app.post('/api/URLs', (request, response) => {
   let { longURL } = request.body;
-  const shortURL = shortid.generate(longURL);
+  const shortUrl = shortid.generate(longURL);
   let dateCreated = Date.now();
   let clicks = 0;
 
@@ -43,9 +43,9 @@ app.post('/api/URLs', (request, response) => {
 
   longURL = normalizeUrl(longURL);
 
-  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks, shortURL };
+  app.locals.URLs[shortUrl] = { longURL, dateCreated, clicks, shortUrl };
 
-  let fullShortenedURL = host + shortURL;
+  let fullShortenedURL = host + shortUrl;
 
   response.status(201).json({ fullShortenedURL, longURL });
 });
@@ -58,7 +58,7 @@ app.get('/:shortURL', (request, response) => {
   link.clicks += 1;
   let longURL = link.longURL;
 
-  response.redirect(longURL);
+  response.status(302).redirect(longURL);
 });
 
 app.listen(app.get('port'), () => {
