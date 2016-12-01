@@ -58,7 +58,7 @@ app.get('/:shortURL', (request, response) => {
   link.clicks += 1;
   let longURL = link.longURL;
 
-  response.redirect(longURL);
+  response.status(302).redirect(longURL);
 });
 
 app.listen(app.get('port'), () => {
