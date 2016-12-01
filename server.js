@@ -55,18 +55,19 @@ app.post('/api/URLs', (request, response) => {
   }
   
   longURL = normalizeUrl(longURL);
-  
-  fetchTitle(longURL, (title) => {
-    generateNewShortenedURL(title);
-  });
-  
+
   let generateNewShortenedURL = (title) => {
+    console.log('generate called!');
     app.locals.URLs[shortURL] = { title, longURL, dateCreated, clicks };
   
     let fullShortenedURL = host + shortURL;
 
     response.status(201).json({ fullShortenedURL, longURL });
   };
+  
+  fetchTitle(longURL, (title) => {
+    generateNewShortenedURL(title);
+  });
   
 });
 
