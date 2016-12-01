@@ -19,6 +19,15 @@ const fetchTitle = (longURL) => {
   });
 };
 
+const checkURL = (longURL) => {
+    request(longURL, (error, response) => {
+    if(error || response.statusCode != 200) {
+      return response.statusCode.send('There was a problem with your request');
+    }
+    else console.log(response.statusCode);
+  });
+};
+
 app.locals.URLs = {
   xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2},
   gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0}, 
@@ -44,31 +53,24 @@ app.get('/api/URLs/', (request, response) => {
 
 app.post('/api/URLs', (request, response) => {
   let { longURL } = request.body;
-  const shortURL = shortid.generate(longURL);
+  longURL = normalizeUrl(longURL);
+  let shortURL = shortid.generate(longURL);
   let dateCreated = Date.now();
   let clicks = 0;
+
+  checkURL(longURL);
+  fetchTitle(longURL);
 
   if(!longURL) {
     return response.status(422).send({
       error: 'No URL specified'
     });
   }
-
-  longURL = normalizeUrl(longURL);
-
-  let generateNewShortenedURL = (title) => {
-    console.log('generate called!');
-    app.locals.URLs[shortURL] = { title, longURL, dateCreated, clicks };
   
-    let fullShortenedURL = host + shortURL;
-
-    response.status(201).json({ fullShortenedURL, longURL });
-  };
+  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
   
-  fetchTitle(longURL, (title) => {
-    generateNewShortenedURL(title);
-  });
-
+  let shortenedURL = host + shortURL;
+  response.status(201).json({ shortenedURL, longURL });
 });
 
 app.get('/:shortURL', (request, response) => {
