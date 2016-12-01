@@ -44,9 +44,9 @@ describe('GET a specific shortURL', () => {
 
   beforeEach(() => {
     this.URL = {
-      shortURL: 'www.short.com',
+      shortURL: 'DJ3JN',
       longURL: 'www.areallylongwebaddress.com' };
-    app.localsURLs = [this.URL];
+    app.locals.URLs[this.URL.shortURL] = this.URL;
   });
 
   afterEach(() => {
@@ -55,7 +55,7 @@ describe('GET a specific shortURL', () => {
 
   it('should return a 300 level response if specific shortURL is found in saved URL array', (done) => {
     request(app)
-      .get(`/api/URLs/${this.URL.shortURL}`)
+      .get(`/${this.URL.shortURL}`)
       .expect(302, done);
   });
 

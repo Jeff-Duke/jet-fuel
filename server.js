@@ -14,7 +14,7 @@ const fetchTitle = (longURL, callback) => {
 
     let $ = cheerio.load(body);
     let title = $('head > title').text();
-    
+
     callback(null, title);
   });
 };
