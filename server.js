@@ -5,19 +5,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const shortid = require('shortid');
 const normalizeUrl = require('normalize-url');
-const request = require('request');
-const cheerio = require('cheerio');
-
-const fetchTitle = (longURL) => {
-  request(longURL, (error, response, body) => {
-    if(!error && response.statusCode == 200) {
-      let $ = cheerio.load(body);
-      let title = $('head > title').text();
-      console.log('title from within the fetchTitle function: ', title);
-      return title;
-    }
-  });
-};
 
 app.locals.URLs = {
   xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 0},
@@ -56,18 +43,11 @@ app.post('/api/URLs', (request, response) => {
   
   longURL = normalizeUrl(longURL);
   
-  fetchTitle(longURL, (title) => {
-    generateNewShortenedURL(title);
-  });
+  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
   
-  let generateNewShortenedURL = (title) => {
-    app.locals.URLs[shortURL] = { title, longURL, dateCreated, clicks };
-  
-    let fullShortenedURL = host + shortURL;
+  let fullShortenedURL = host + shortURL;
 
-    response.status(201).json({ fullShortenedURL, longURL });
-  };
-  
+  response.status(201).json({ fullShortenedURL, longURL });
 });
 
 app.get('/:shortURL', (request, response) => {
