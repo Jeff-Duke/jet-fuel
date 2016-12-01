@@ -19,28 +19,24 @@
       </label>
       <button class="submit-button">Submit</button>
     </form>
-    <section>
-      <label>
-        Show oldest first.
-        <button class="oldest-button"></button>
-      </label>
-      <label>
-        Show newest first.
-        <button class="newest-button"></button>
-      </label>
-      <label>
-        Show most popular first.
-        <button class="popular-button"></button>
-      </label>
-      <label>
-        Show the links that no one cares about first.
-        <button class="lonely-button"></button>
-      </label>
-
+    <section class="sort-buttons">
+      <button class="oldest-button">
+        Show oldest first
+      </button>
+      <button class="newest-button">
+        Show newest first
+      </button>
+      <button class="popular-button">
+        OMG, like show the most popular first, duh
+      </button>
+      <button class="lonely-button">
+        Show the sad links no one cares about first
+      </button>
     </section>
     <section class="display-urls">
     </section>
     <script src="jquery-3.1.1.min.js"></script>
+    <script src="lodash.js"></script>
     <script src="moment.js"></script>
     <script src="index.js"></script>
   </body>

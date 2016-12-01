@@ -9,3 +9,9 @@ form {
   margin: 10px;
   padding: 10px;
 }
+
+.sort-buttons button {
+  display: block;
+  height: 25px;
+  margin: 5px auto;
+}
