@@ -7,9 +7,9 @@ const shortid = require('shortid');
 const normalizeUrl = require('normalize-url');
 
 app.locals.URLs = {
-  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2},
-  gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0}, 
-  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 3}
+  xZB32: { longURL: 'http://www.turing.io', dateCreated: 1480540827272, clicks: 2, shortUrl: 'xZB32'},
+  gsYqa: { longURL: 'http://www.twitter.com', dateCreated: 1480540869274, clicks: 0, shortUrl: 'gsYqa'},
+  hASp2: { longURL: 'http://www.facebook.com', dateCreated: 1480540923909, clicks: 3, shortUrl: 'hASp2'}
 };
 
 app.use(express.static('public'));
@@ -43,7 +43,7 @@ app.post('/api/URLs', (request, response) => {
 
   longURL = normalizeUrl(longURL);
 
-  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks };
+  app.locals.URLs[shortURL] = { longURL, dateCreated, clicks, shortURL };
 
   let fullShortenedURL = host + shortURL;
 
