@@ -31,7 +31,7 @@ $submitButton.on('click', (e) => {
   $.ajax({
     url: '/api/URLs/',
     type: 'POST',
-    data: { longURL: $urlInput.val() },
+    data: {longURL: $urlInput.val()},
     success: () => {
       getAllUrls();
       $urlInput.val('');
